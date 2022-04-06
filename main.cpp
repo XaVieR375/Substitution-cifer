@@ -64,7 +64,7 @@ Source for path:    Common sense
 
 - Lot's of room for inprovement here. I barely knew/know what I am doing here during the
 open and save dialogue boxes. I just got help from discord user µBrain#6100 who googled
-up the template used from lines 191 to 207 in the Window dialogue function found from:  http://www.cplusplus.com/forum/windows/169960/
+up the template used from lines 177 to 191 in the Window dialogue function found from:  http://www.cplusplus.com/forum/windows/169960/
 */
 
 string AlphabetShuffled(string alpha);
@@ -75,7 +75,7 @@ void BrowseToFile(string &usr_msg, string a_plain, string a_shuff, bool IO = tru
 
 int main()
 {
-    int users_selection{};
+    string users_selection{""};
     string alphabet_plain {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
     string alphabet_shuffled{};
     string users_msg;
@@ -90,45 +90,46 @@ int main()
         cout << "3) Load a sub cifer message from clipboard\n";
         cout << "4) Exit\n\n";
         cout << "Select a number from 1 to 4 from the options above: ";
-        while(!(cin >> users_selection) || users_selection < 1 || users_selection > 4)
+        while(getline(cin, users_selection, '\n') && users_selection != "1" && users_selection != "2" && users_selection != "3" && users_selection != "4")
         {
             cout << "Invalid entry. Try again: ";
-            cin.clear();    //clear bad input flag
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');   //discard input
         }
-
         
-        if(users_selection == 1)
+        cout << "\n";
+        cin.clear();
+        if(users_selection == "1")
         {
             alphabet_shuffled = AlphabetShuffled(alphabet_plain);
-            char users_choice;
+            char users_choice{};
             cout << alphabet_plain << "\n";
             cout << alphabet_shuffled << "\n\n";
             
             cout << "Enter your message:\t\t";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); //or cin.get() would work too, to discard input from previous cin(?) or this will be skipped
-            getline(cin, users_msg);
+            cin >> users_msg;
             
             cout << "You're subbed message:\t\t";
             ConvertToSub(users_msg, alphabet_plain, alphabet_shuffled);
             cout << users_msg << "\n\n";
             cout << "Would you like to save the the message to a txt file (y/n): ";
-
-            while(cin >> users_choice && users_choice != 'y' && users_choice != 'Y' && users_choice != 'n' && users_choice != 'N')
+            users_choice = cin.get();
+            while(cin.get(users_choice) && users_choice != 'y' && users_choice != 'Y' && users_choice != 'n' && users_choice != 'N')
             {
-                cout << "Invalid entry, try again (y/n): ";
-                cin >> users_choice;
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if(users_choice != '\n') // cin.get has no delimiter, so this step is nessessary
+                {
+                    cout << "Invalid entry, try again (y/n): ";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+                else
+                    cout << "Invalid entry, try again (y/n): ";
             }
             
             if(users_choice == 'y' || users_choice == 'Y')
             {
                 BrowseToFile(users_msg, alphabet_plain, alphabet_shuffled, !OpnOrSave);
             }
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
-        else if(users_selection == 2)
+        else if(users_selection == "2")
         {
             BrowseToFile(users_msg, alphabet_plain, alphabet_shuffled);
             cout << "The original message is:\n\n";
@@ -136,11 +137,9 @@ int main()
             cout << users_msg;
         }
         
-        else if(users_selection == 3)
+        else if(users_selection == "3")
         {
             cout << "Paste in the shuffled/subbed characters:\t";
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // ignore to not skip prompt. numeric limit stream size to not store anything in the buffer or multiple char's other than index 0 will be stored into "users_selection"(?).
-                                                                            // "numeric_limits" requires the <limits> header file, but either one of the includes already tagged it or codelite ide includes it by default
             getline(cin, alphabet_shuffled);
             cout << "Paste in your message:\t\t\t\t";
             getline(cin, users_msg);
@@ -152,6 +151,7 @@ int main()
         
         else
             return 0;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         users_msg = "";
         alphabet_shuffled = "";
         cout << "\n\n\n\n";
