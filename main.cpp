@@ -7,13 +7,6 @@
 //#define NOMINMAX    // For VISUAL STUDIOS compiler: To use the MAX keyword from cin.ignore(numeric_limits..) in VisualStudios
 
 #include <windows.h>
-
-//using namespace std;  // "best practice" is to avoid using namespace std because it can (but not likely), cause certain problems.
-                        // Sources: https://www.reddit.com/r/learnprogramming/comments/19f3cr/c_why_do_people_say_not_to_use_using_namespace_std/           https://www.geeksforgeeks.org/using-namespace-std-considered-bad-practice/
-                        // BUT: It doesn't effect anything in terms of compile time, or program speed.
-                        // If not using own namespaces with ambiguous names and if only using
-                        // namespace std in each .cpp file and not header file, than it's absolutely fine.
-                        // For this program, using namespace std is perfectly fine, but for demonstration purposes, I'm using what's needed manually.
 using std::cout;
 using std::cin;
 using std::string;
@@ -22,56 +15,10 @@ using std::streamsize;
 using std::fstream;
 using std::ios;
 
-// TODO:
-// Remake sub cifer using find function instead of nested looping.
-// Create 3 functions:
-// 1 to generate random key and optionally, only if existing key is empty(for future loading in .txt file with a spcific key),
-// 1 to encrypt message,
-// and 1 to decrypt message
-// Display generated random key once to user so they can use it to decrypt the message
-// Optional: Add the ability to open and save to file now to. No need to do later. Learn now.
-
-// Rand string sources:
-// https://stackoverflow.com/questions/8364597/shuffling-string
-// https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html
-// http://www.cplusplus.com/reference/algorithm/random_shuffle/
-
-// Fstream sources:
-// https://stackoverflow.com/questions/15667530/fstream-wont-create-a-file
-
-// int selectionion condition source:
-// https://www.daniweb.com/programming/software-development/threads/279409/cin-to-allow-numeric-only
-
-// cin >> user_selection then getline(cin, users_msg) issue that caused program to skip the users message
-// prompt. Answer source: Discord user Death#7963
-/*My Question: "is something left in the buffer that needs to be ignored?"
-Response: " yes, this happens when u do cin >> into a number followed by a getline
-From the cin >>, there is a number and a newline character in the buffer
-but it only takes the number the first thing the getline sees is the '\n' so it's like
-"Ok, I guess I'm done" "
-*/
-
-/*
-- GetOpenFileName function error occurs in codelite and codeblocks which doesn't occur in
-Visual studios because codelite uses GCC compiler, codeblocks uses minGW (VS uses microsoft compiler). 
-Error displayed is "undefined reference GetOpenFileName"
-Solution for codelite: Add "comdlg32.dll" to the linker library in the project.
-Source: https://stackoverflow.com/questions/40751685/using-getopenfilename-in-dev-c-vs      https://i.stack.imgur.com/Ewi8Q.png
-Solution for codeblocks:    Rightclick project->Build options, Under Linker settings->Add, navigate
-or paste the path: "C:\Windows\System32\comdlg32.dll" and OK
-Source for linker location: https://c-for-dummies.com/blog/?p=2159
-Source for path:    Common sense
-
-- Lot's of room for inprovement here. I barely knew/know what I am doing here during the
-open and save dialogue boxes. I just got help from discord user µBrain#6100 who googled
-up the template used from lines 177 to 191 in the Window dialogue function found from:  http://www.cplusplus.com/forum/windows/169960/
-*/
-
 string AlphabetShuffled(string alpha);
 void ConvertToSub(string &msg, string a_plain, string a_shuffled);
 void ConvertToPlain(string &msg, string a_plain, string a_shuffled);
 void BrowseToFile(string &usr_msg, string a_plain, string a_shuff, bool IO = true);
-
 
 int main()
 {
@@ -80,7 +27,6 @@ int main()
     string alphabet_shuffled{};
     string users_msg;
     bool OpnOrSave = true;
-    
     
     while(true)
     {
@@ -96,7 +42,6 @@ int main()
         }
         
         cout << "\n";
-        cin.clear();
         if(users_selection == "1")
         {
             alphabet_shuffled = AlphabetShuffled(alphabet_plain);
