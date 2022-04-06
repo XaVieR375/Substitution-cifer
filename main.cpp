@@ -64,7 +64,7 @@ Source for path:    Common sense
 
 - Lot's of room for inprovement here. I barely knew/know what I am doing here during the
 open and save dialogue boxes. I just got help from discord user µBrain#6100 who googled
-up the template used from lines 177 to 191 in the Window dialogue function found from:  http://www.cplusplus.com/forum/windows/169960/
+up the template used from lines 191 to 207 in the Window dialogue function found from:  http://www.cplusplus.com/forum/windows/169960/
 */
 
 string AlphabetShuffled(string alpha);
