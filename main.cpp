@@ -59,14 +59,9 @@ int main()
             users_choice = cin.get();
             while(cin.get(users_choice) && users_choice != 'y' && users_choice != 'Y' && users_choice != 'n' && users_choice != 'N')
             {
+                cout << "Invalid entry, try again (y/n): ";
                 if(users_choice != '\n') // cin.get has no delimiter, so this step is nessessary
-                {
-                    cout << "Invalid entry, try again (y/n): ";
-                    cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                }
-                else
-                    cout << "Invalid entry, try again (y/n): ";
             }
             
             if(users_choice == 'y' || users_choice == 'Y')
