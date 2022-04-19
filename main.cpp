@@ -90,7 +90,7 @@ int main()
         }
         
         else
-            return 0;
+            break;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         users_msg = "";
         alphabet_shuffled = "";
