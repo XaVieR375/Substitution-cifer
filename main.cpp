@@ -28,6 +28,7 @@ int main()
     string users_msg;
     bool OpnOrSave = true;
     
+    
     while(true)
     {
         cout << "------------ Sub cifer ------------ \n\n";
@@ -49,10 +50,9 @@ int main()
             cout << alphabet_plain << "\n";
             cout << alphabet_shuffled << "\n\n";
             
-            cout << "Enter your message:\t\t";
-            cin >> users_msg;
-            
-            cout << "You're subbed message:\t\t";
+            cout << "Enter your message (end it with a tilde `):\n\n";
+            getline(cin, users_msg, '`');
+            cout << "\n\nYou're subbed message:\n\n";
             ConvertToSub(users_msg, alphabet_plain, alphabet_shuffled);
             cout << users_msg << "\n\n";
             cout << "Would you like to save the the message to a txt file (y/n): ";
@@ -91,13 +91,13 @@ int main()
         
         else
             break;
+            
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         users_msg = "";
         alphabet_shuffled = "";
         cout << "\n\n\n\n";
     }
 }
-
 
 string AlphabetShuffled(string alpha)
 {
