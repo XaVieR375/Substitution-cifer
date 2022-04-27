@@ -31,7 +31,7 @@ int main()
     
     while(true)
     {
-        cout << "------------ Sub cifer ------------ \n\n";
+        cout << "------------ Sub Cipher ------------ \n\n";
         cout << "1) Create a sub cifer message with option to save it\n";
         cout << "2) Load a saved .txt file with a subbed message\n";
         cout << "3) Load a sub cifer message from clipboard\n";
