@@ -1,3 +1,3 @@
-# Substitution-cifer
-Sub Cifer console app.
+# Substitution-cipher
+Sub Cipher console app.
 Beginner C++ excercises for fun and learning.
