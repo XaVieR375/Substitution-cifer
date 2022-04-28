@@ -22,7 +22,7 @@ void BrowseToFile(string &usr_msg, string a_plain, string a_shuff, bool IO = tru
 
 int main()
 {
-    string users_selection{""};
+    string users_selection{};
     string alphabet_plain {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
     string alphabet_shuffled{};
     string users_msg;
@@ -32,9 +32,9 @@ int main()
     while(true)
     {
         cout << "------------ Sub Cipher ------------ \n\n";
-        cout << "1) Create a sub cifer message with option to save it\n";
+        cout << "1) Create a sub cipher message with option to save it\n";
         cout << "2) Load a saved .txt file with a subbed message\n";
-        cout << "3) Load a sub cifer message from clipboard\n";
+        cout << "3) Load a sub cipher message from clipboard\n";
         cout << "4) Exit\n\n";
         cout << "Select a number from 1 to 4 from the options above: ";
         while(getline(cin, users_selection, '\n') && users_selection != "1" && users_selection != "2" && users_selection != "3" && users_selection != "4")
@@ -67,13 +67,13 @@ int main()
             if(users_choice == 'y' || users_choice == 'Y')
             {
                 BrowseToFile(users_msg, alphabet_plain, alphabet_shuffled, !OpnOrSave);
+                getline(cin, users_msg);
             }
         }
         else if(users_selection == "2")
         {
             BrowseToFile(users_msg, alphabet_plain, alphabet_shuffled);
             cout << "The original message is:\n\n";
-            ConvertToPlain(users_msg, alphabet_plain, alphabet_shuffled);
             cout << users_msg;
         }
         
@@ -81,12 +81,13 @@ int main()
         {
             cout << "Paste in the shuffled/subbed characters:\t";
             getline(cin, alphabet_shuffled);
-            cout << "Paste in your message:\t\t\t\t";
-            getline(cin, users_msg);
+            cout << "Paste in your message: (end it with a tilde `):\n";
+            getline(cin, users_msg, '`');
             
-            cout << "The original message is:\t\t\t";
+            cout << "\n\nThe original message is:\n\n";
             ConvertToPlain(users_msg, alphabet_plain, alphabet_shuffled);
             cout << users_msg;
+            getline(cin, users_msg);
         }
         
         else
@@ -95,9 +96,11 @@ int main()
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         users_msg = "";
         alphabet_shuffled = "";
-        cout << "\n\n\n\n";
+        //cout << "\n\n\n\n";
+        system("cls");
     }
 }
+
 
 string AlphabetShuffled(string alpha)
 {
@@ -139,12 +142,14 @@ void BrowseToFile(string &usr_msg, string a_plain, string a_shuff, bool IO)
     ofn.hwndOwner = HWND_DESKTOP;
     ofn.lpstrFile = szFile;
     ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = TEXT("All\0*.*\0Text\0*.TXT\0");
+    ofn.lpstrFilter = TEXT("Text Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0");
     ofn.nFilterIndex = 1;
     ofn.lpstrFileTitle = NULL;
     ofn.nMaxFileTitle = 0;
     ofn.lpstrInitialDir = NULL;
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+    ofn.lpstrDefExt = ofn.lpstrFilter;
+    //ofn.lpstrDefExt = "txt";
 
     // Everything above is for setting up the dialogu box.
     // At this time I lack a bit of knowledge on this and need to learn it fully.
@@ -175,7 +180,7 @@ void BrowseToFile(string &usr_msg, string a_plain, string a_shuff, bool IO)
     {
         GetSaveFileName(&ofn);     // This function saves the dialogue box
         fstream outp_obj;
-        outp_obj.open(ofn.lpstrFile, ios::out | ios::app);
+        outp_obj.open(ofn.lpstrFile, ios::out /*| ios::app*/);
         if(outp_obj.is_open())
         {
             outp_obj << "Alphabet plain:\t\t[ " << a_plain << " ]\n";
