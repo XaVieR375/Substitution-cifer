@@ -17,3 +17,6 @@ Key (randomized):		[ ░▲♥½á⌐▓♠▬Ü◄ì↕}û☻æ↑∟àô♦╣
 
 
 Select a number from 1 to 4 from the options above:
+
+
+Download: https://github.com/XaVieR375/Substitution-cifer/raw/main/25Section10ChallengeAltVersion.exe
