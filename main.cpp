@@ -113,7 +113,7 @@ int main()
         {
             // Console mode inputs wchar values in decimal format so a new set of wchar variables
             // are used to avoid overwritting unicode values with decimal values
-            wchar_t key_symbols_shuffled_wchar[alphabet_plain.size()]{};
+            wchar_t key_symbols_shuffled_wchar[max_msg_size]{};
             wchar_t users_msg_subbed_wchar[max_msg_size]{};
             
             cout << "Paste in the shuffled/subbed characters:\t";
