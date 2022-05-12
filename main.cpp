@@ -165,9 +165,9 @@ void Substitute(string &msg,  wchar_t msg_Subbed[], size_t msg_Subbed_size, wcha
         for(size_t i{}; i < msg.size(); ++i)
         {
             if(a_plain.find(msg.at(i)) != string::npos)
-            {
                 msg_Subbed[i] = k_shuffled[a_plain.find(msg.at(i))];
-            }
+            else
+                msg_Subbed[i] = msg[i];
         }
     }
 
