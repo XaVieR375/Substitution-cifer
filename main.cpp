@@ -25,6 +25,7 @@ using std::random_shuffle;
 using std::wfstream;
 
 // Globals variables (bad practice, but alternative options like reference_wrapper seams like would create even more overhead)
+// 2 global C style strings (arrays)
 wchar_t key_symbols_original_unicode[]
 {
     0x263A, 0x263B, 0x2665, 0x2666, 0x2663, 0x2660, 0x2642, 0x2640, 0x266B, 0x263C, 0x25BA,
@@ -39,7 +40,7 @@ wchar_t key_symbols_original_unicode[]
     0x2559, 0x2558, 0x2552, 0x2553, 0x256B, 0x256A, 0x2518, 0x250C, 0x3B1, 0xDF, 0x393, 0x3C0,
     0x3A3, 0x3C3, 0xB5, 0x3C4, 0x3A6, 0x398, 0x3A9, 0x3B4, 0x221E, 0x3C6, 0x3B5, 0x2229, 0x2261,
     0xB1, 0x2265, 0x2264, 0x2320, 0x2321, 0xF7, 0x2248, 0xB0, 0x207F, 0xB2
-}; // C syle string with 88 chars(symbols).    Unicode conversion source / Code table values:    https://r12a.github.io/app-conversion/
+}; // 147 chars(symbols) c style string/array will be shuffled. Only the first 88 will be used.    Unicode conversion source / Code table values:    https://r12a.github.io/app-conversion/
 const int max_msg_size{50000};
 wchar_t users_msg_subbed_unicode[max_msg_size];
 
@@ -78,7 +79,7 @@ int main()
             wcout << " ]\n\n";
             _setmode(_fileno(stdout), _O_TEXT);
             
-            cout << "Enter your message (end it with a tilde `):\n\n";
+            cout << "Enter your message. End it with a tilde `(max " << max_msg_size << " chars):\n\n";
             getline(cin, users_msg, '`');
             cout << "\n\nYou're subbed message:\n\n";
             Substitute(users_msg, users_msg_subbed_unicode, 0, key_symbols_original_unicode, alphabet_plain);
