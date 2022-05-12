@@ -45,8 +45,8 @@ const int max_msg_size{50'000};
 wchar_t users_msg_subbed_unicode[max_msg_size];
 
 void KeyShuffled();     // https://www.geeksforgeeks.org/shuffle-an-array-using-stl-in-c
-void Substitute(string &msg, wchar_t msg_Subbed[], size_t msg_Subbed_size,  wchar_t k_shuffled[], string a_plain);
-void BrowseToFile(string usr_msg_plain, string a_plain, bool IO = true);
+void Substitute(string &, wchar_t[], size_t,  wchar_t[], string);
+void BrowseToFile(string, string, bool = true);
 
 
 int main()
