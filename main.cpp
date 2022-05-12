@@ -250,7 +250,7 @@ void BrowseToFile(string usr_msg_plain, string a_plain, bool IO)
             for(size_t i{}; i < usr_msg_plain.size(); ++i)
             {
                 outp_obj << users_msg_subbed_unicode[i];
-                if(i != 0 && i % 100 == 0)
+                if(i != 0 && i % 118 == 0)
                     outp_obj << "\n";
             }                
             outp_obj << "\n\n\n\n";
