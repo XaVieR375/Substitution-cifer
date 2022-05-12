@@ -118,7 +118,7 @@ int main()
             
             cout << "Paste in the shuffled/subbed characters:\t";
             wcin.getline(key_symbols_shuffled_wchar, max_msg_size);
-            cout << "\nPaste in your message: (max 5000 chars):\n\n";
+            cout << "\nPaste in your message: (max " << max_msg_size << " chars):\n\n";
             wcin.getline(users_msg_subbed_wchar, max_msg_size);
             
             cout << "\n\nThe original message is:\n\n";
