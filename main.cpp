@@ -41,7 +41,7 @@ wchar_t key_symbols_original_unicode[]
     0x3A3, 0x3C3, 0xB5, 0x3C4, 0x3A6, 0x398, 0x3A9, 0x3B4, 0x221E, 0x3C6, 0x3B5, 0x2229, 0x2261,
     0xB1, 0x2265, 0x2264, 0x2320, 0x2321, 0xF7, 0x2248, 0xB0, 0x207F, 0xB2
 }; // 147 chars(symbols) c style string/array will be shuffled. Only the first 88 will be used.    Unicode conversion source / Code table values:    https://r12a.github.io/app-conversion/
-const int max_msg_size{50000};
+const int max_msg_size{50'000};
 wchar_t users_msg_subbed_unicode[max_msg_size];
 
 void KeyShuffled();     // https://www.geeksforgeeks.org/shuffle-an-array-using-stl-in-c
