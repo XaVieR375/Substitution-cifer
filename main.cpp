@@ -44,6 +44,7 @@ wchar_t key_symbols_original_unicode[]
 const int max_msg_size{50'000};
 wchar_t users_msg_subbed_unicode[max_msg_size];
 
+// Function prototypes
 void KeyShuffled();     // https://www.geeksforgeeks.org/shuffle-an-array-using-stl-in-c
 void Substitute(string &, wchar_t[], size_t,  wchar_t[], string);
 void BrowseToFile(string, string, bool = true);
