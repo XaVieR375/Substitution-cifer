@@ -99,7 +99,7 @@ int main()
             
             if(users_choice == 'y' || users_choice == 'Y')
             {
-                BrowseToFile(users_msg, alphabet_plain, false);
+                BrowseToFile(users_msg, alphabet_plain_display, false);
                 getline(cin, users_msg);
             }
         }
