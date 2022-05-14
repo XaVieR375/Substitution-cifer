@@ -241,9 +241,9 @@ void BrowseToFile(string usr_msg_plain, string a_plain, bool IO)
         if(outp_obj.is_open())
         {
             outp_obj << "\nAlphabet plain:\t\t[ ";
-            for(size_t i{}; i < a_plain.size()-2; ++i)
-                outp_obj << (char)a_plain.at(i);
-            outp_obj << "\\t\\n ]\n\n";
+            for(char plain : a_plain)
+                outp_obj << plain;
+            outp_obj << " ]\n\n";
             outp_obj << "Key (symbols):\t\t[ ";
             for(size_t i{}; i < a_plain.size(); ++i)
                 outp_obj << key_symbols_original_unicode[i];
