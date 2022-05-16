@@ -137,7 +137,7 @@ int main()
     }
 }
 
-
+// Function definitions
 void KeyShuffled(wchar_t key[], size_t key_size)
 {
     srand(time(nullptr));
