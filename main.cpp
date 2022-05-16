@@ -1,16 +1,15 @@
 #include <iostream>
 #include <string>
-#include <cstdlib>      // srand
-#include <ctime>        // time
-#include <algorithm>    // std::random_shuffle
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
 #include <fstream>
-#include <io.h>         // for _fileno. For unicode conversion (ie _setmode(_fileno(stdout), _O_U16TEXT))
-#include <fcntl.h>      // for _setmode. For unicode as well
-#include <locale>       // for std::consume_header  https://en.cppreference.com/w/cpp/locale/codecvt_mode
-#include <codecvt>      // for std::consume_header
-
-//#define NOMINMAX    // For VISUAL STUDIOS compiler: To use the MAX keyword from cin.ignore(numeric_limits..) in VisualStudios
+#include <io.h>
+#include <fcntl.h>
+#include <locale>
+#include <codecvt>
 #include <windows.h>
+//#define NOMINMAX
 
 using std::cout;
 using std::cin;
@@ -24,55 +23,55 @@ using std::wstring;
 using std::random_shuffle;
 using std::wfstream;
 
-// Globals variables (bad practice, but alternative options like reference_wrapper seams like would create even more overhead)
-// 2 global C style strings (arrays)
-wchar_t key_symbols_original_unicode[]
-{
-    0x263A, 0x263B, 0x2665, 0x2666, 0x2663, 0x2660, 0x2642, 0x2640, 0x266B, 0x263C, 0x25BA,
-    0x25C4, 0x2195, 0x203C, 0xB6, 0xA7, 0x25AC, 0x21A8, 0x2191, 0x2193, 0x221F, 0x2194, 0x25B2,
-    0x25BC, 0x007B, 0x007C, 0x007D, 0x007E, 0x2302, 0xC7, 0xFC, 0xE9, 0xE2, 0xE4, 0xE0, 0xE5,
-    0xE7, 0xEA, 0xEB, 0xE8, 0xEF, 0xEE, 0xEC, 0xC4, 0xC5, 0xC9, 0xE6, 0xC6, 0xF4, 0xF6, 0xF2,
-    0xFB, 0xF9, 0xFF, 0xD6, 0xDC, 0xA2, 0xA3, 0xA5, 0x20A7, 0x192, 0xE1, 0xED, 0xF3, 0xFA,
-    0xF1, 0xD1, 0xAA, 0xBA, 0xBF, 0x2310, 0xAC, 0xBD, 0xBC, 0xA1, 0xAB, 0xBB, 0x2591, 0x2592,
-    0x2593, 0x2502, 0x2524, 0x2561, 0x2562, 0x2556, 0x2555, 0x2563, 0x2551, 0x2557, 0x255D,
-    0x255C, 0x255B, 0x2510, 0x2514, 0x2534,  0x252C, 0x251C, 0x2500, 0x253C, 0x255E, 0x255F,
-    0x255A, 0x2554, 0x2569, 0x2566, 0x2560, 0x2550, 0x256C, 0x2567, 0x2568, 0x2564, 0x2565,
-    0x2559, 0x2558, 0x2552, 0x2553, 0x256B, 0x256A, 0x2518, 0x250C, 0x3B1, 0xDF, 0x393, 0x3C0,
-    0x3A3, 0x3C3, 0xB5, 0x3C4, 0x3A6, 0x398, 0x3A9, 0x3B4, 0x221E, 0x3C6, 0x3B5, 0x2229, 0x2261,
-    0xB1, 0x2265, 0x2264, 0x2320, 0x2321, 0xF7, 0x2248, 0xB0, 0x207F, 0xB2
-}; // 147 chars(symbols) c style string/array will be shuffled. Only the first 88 will be used.    Unicode conversion source / Code table values:    https://r12a.github.io/app-conversion/
-const int max_msg_size{50'000};
-wchar_t users_msg_subbed_unicode[max_msg_size];
-
 // Function prototypes
-void KeyShuffled();     // https://www.geeksforgeeks.org/shuffle-an-array-using-stl-in-c
+void KeyShuffled(wchar_t[], size_t);     // https://www.geeksforgeeks.org/shuffle-an-array-using-stl-in-c
 void Substitute(string &, wchar_t[], size_t,  wchar_t[], string);
-void BrowseToFile(string, string, bool = true);
-
+void BrowseToFile(string, wchar_t[], int, wchar_t[], string, bool = true);
 
 int main()
 {
     string alphabet_plain {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,./?\"\';[]1234567890!@#$%^&*()-=_+ \n\t"}; //88
     string alphabet_plain_display {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,./?\"\';[]1234567890!@#$%^&*()-=_+ \\n\\t"};
+    wchar_t key_symbols_original_unicode[]
+    {
+        0x263A, 0x263B, 0x2665, 0x2666, 0x2663, 0x2660, 0x2642, 0x2640, 0x266B, 0x263C, 0x25BA,
+        0x25C4, 0x2195, 0x203C, 0xB6, 0xA7, 0x25AC, 0x21A8, 0x2191, 0x2193, 0x221F, 0x2194, 0x25B2,
+        0x25BC, 0x007B, 0x007C, 0x007D, 0x007E, 0x2302, 0xC7, 0xFC, 0xE9, 0xE2, 0xE4, 0xE0, 0xE5,
+        0xE7, 0xEA, 0xEB, 0xE8, 0xEF, 0xEE, 0xEC, 0xC4, 0xC5, 0xC9, 0xE6, 0xC6, 0xF4, 0xF6, 0xF2,
+        0xFB, 0xF9, 0xFF, 0xD6, 0xDC, 0xA2, 0xA3, 0xA5, 0x20A7, 0x192, 0xE1, 0xED, 0xF3, 0xFA,
+        0xF1, 0xD1, 0xAA, 0xBA, 0xBF, 0x2310, 0xAC, 0xBD, 0xBC, 0xA1, 0xAB, 0xBB, 0x2591, 0x2592,
+        0x2593, 0x2502, 0x2524, 0x2561, 0x2562, 0x2556, 0x2555, 0x2563, 0x2551, 0x2557, 0x255D,
+        0x255C, 0x255B, 0x2510, 0x2514, 0x2534,  0x252C, 0x251C, 0x2500, 0x253C, 0x255E, 0x255F,
+        0x255A, 0x2554, 0x2569, 0x2566, 0x2560, 0x2550, 0x256C, 0x2567, 0x2568, 0x2564, 0x2565,
+        0x2559, 0x2558, 0x2552, 0x2553, 0x256B, 0x256A, 0x2518, 0x250C, 0x3B1, 0xDF, 0x393, 0x3C0,
+        0x3A3, 0x3C3, 0xB5, 0x3C4, 0x3A6, 0x398, 0x3A9, 0x3B4, 0x221E, 0x3C6, 0x3B5, 0x2229, 0x2261,
+        0xB1, 0x2265, 0x2264, 0x2320, 0x2321, 0xF7, 0x2248, 0xB0, 0x207F, 0xB2
+    }; // 147 chars(symbols) c style string/array will be shuffled. Only the first 88 will be used.    Unicode conversion source / Code table values:    https://r12a.github.io/app-conversion/
+    size_t key_symbols_original_unicode_size = sizeof(key_symbols_original_unicode) / sizeof(key_symbols_original_unicode[0]);
+    const int max_msg_size{50'000};
+    wchar_t users_msg_subbed_unicode[max_msg_size]{};
+    string users_msg{};
     string users_selection{};
-    string users_msg;
     
     while(true)
     {
         cout << "------------ Sub Cipher ------------ \n\n";
         cout << "1) Create a sub cipher message with option to save it\n";
+        //cout << "2) Sub / unsub a message from a saved .txt file\n";
         cout << "2) Load a saved .txt file with a subbed message\n";
         cout << "3) Load a sub cipher message from clipboard\n";
         cout << "4) Exit\n\n";
         cout << "Select a number from 1 to 4 from the options above: ";
         while(getline(cin, users_selection, '\n') && users_selection != "1" && users_selection != "2" && users_selection != "3" && users_selection != "4")
+        {
             cout << "Invalid entry. Try again: ";
+        }
         
         cout << "\n";
         if(users_selection == "1")
         {
             cout << "Alphabet Plain:\t[ " << alphabet_plain_display << " ]\n";
-            KeyShuffled();
+            KeyShuffled(key_symbols_original_unicode, key_symbols_original_unicode_size);
             wcout << "Key (symbols):\t[ " ;
             _setmode(_fileno(stdout), _O_U16TEXT);
             for(size_t i{}; i < alphabet_plain.size(); ++i)
@@ -99,13 +98,13 @@ int main()
             
             if(users_choice == 'y' || users_choice == 'Y')
             {
-                BrowseToFile(users_msg, alphabet_plain_display, false);
+                BrowseToFile(users_msg, users_msg_subbed_unicode, max_msg_size, key_symbols_original_unicode, alphabet_plain_display, false);
                 getline(cin, users_msg);
             }
         }
         else if(users_selection == "2")
         {
-            BrowseToFile(users_msg, alphabet_plain);
+            BrowseToFile(users_msg, users_msg_subbed_unicode, max_msg_size, key_symbols_original_unicode, alphabet_plain_display);
             cout << "The original message is:\n\n";
             Substitute(users_msg, users_msg_subbed_unicode, max_msg_size, key_symbols_original_unicode, alphabet_plain);
             cout << users_msg;
@@ -140,14 +139,13 @@ int main()
 }
 
 
-void KeyShuffled()
+void KeyShuffled(wchar_t key[], size_t key_size)
 {
-    size_t key_symbols_original_unicode_size = sizeof(key_symbols_original_unicode) / sizeof(key_symbols_original_unicode[0]);
-    srand(time(0));
-    random_shuffle(key_symbols_original_unicode, key_symbols_original_unicode + key_symbols_original_unicode_size);
+    srand(time(nullptr));
+    random_shuffle(key, key + key_size);
 }
 
-void Substitute(string &msg,  wchar_t msg_Subbed[], size_t msg_Subbed_size, wchar_t k_shuffled[], string a_plain)
+void Substitute(string &msg, wchar_t msg_Subbed[], size_t msg_Subbed_size, wchar_t k_shuffled[], string a_plain)
 {
     if(msg.size() == 0)
     {
@@ -175,10 +173,10 @@ void Substitute(string &msg,  wchar_t msg_Subbed[], size_t msg_Subbed_size, wcha
 
 }
 
-void BrowseToFile(string usr_msg_plain, string a_plain, bool IO)
+void BrowseToFile(string usr_msg_plain, wchar_t msg_subbed[], int max_msg_size, wchar_t key[], string a_plain, bool IO)
 {
-    OPENFILENAME ofn;           // common dialog box structure
-    TCHAR szFile[260] = { 0 };  // if using TCHAR macros
+    OPENFILENAME ofn;
+    TCHAR szFile[260] = { 0 };
     
     // Initialize OPENFILENAME
     ZeroMemory(&ofn, sizeof(ofn));
@@ -191,13 +189,13 @@ void BrowseToFile(string usr_msg_plain, string a_plain, bool IO)
     ofn.lpstrFileTitle = NULL;
     ofn.nMaxFileTitle = 0;
     ofn.lpstrInitialDir = NULL;
-    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT; //ofn.Flags = OFN_SHOWHELP | OFN_OVERWRITEPROMPT;
     ofn.lpstrDefExt = ofn.lpstrFilter;
 
     // Everything above is for setting up the dialogu box.
     // At this time I lack a bit of knowledge on this and need to learn it fully.
     // The rest below was history/easy.
-    if (IO == true)// Open it.     parameter was if(GetOpenFileName(&ofn) == TRUE)  <- Which would mean while the dialogue box is open..
+    if (IO == true)// Open it.
     {
         GetOpenFileName(&ofn);      // This function opens the dialogue box
         wfstream inp_obj;
@@ -213,31 +211,33 @@ void BrowseToFile(string usr_msg_plain, string a_plain, bool IO)
             {
                 inp_obj.getline(text_content2, max_msg_size);
                 if(line == 4)
+                {
                     for(int i {}, letters_per_line{}; i < 109; ++i)
+                    {
                         if(i > 17 && i < 106)
                         {
-                            key_symbols_original_unicode[letters_per_line] = text_content2[i];
+                            key[letters_per_line] = text_content2[i];
                             ++letters_per_line;
                         }
+                    }
+                }
                 
                 if(line > 9)
                     users_msg_wstring += text_content2;
                 ++line;
             };
             for(size_t i{}; i < users_msg_wstring.size(); ++i)
-                users_msg_subbed_unicode[i] = users_msg_wstring[i];
+                msg_subbed[i] = users_msg_wstring[i];
         }
         else
             cout << "Error. Failed to open file from path.\nFile or dir inaccessible. Read/write permissions may be denied\n";
     }
-    //else    // Save it
-    else
+    else    // Save it
     {
         GetSaveFileName(&ofn);     // This function saves the dialogue box
         wfstream outp_obj;
-        outp_obj.open(ofn.lpstrFile, ios::out| ios::binary);
+        outp_obj.open(ofn.lpstrFile, ios::out| ios::binary /*| ios::app*/); //| ios::binary);
         outp_obj.imbue(std::locale(outp_obj.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::codecvt_mode::little_endian>));
-
         if(outp_obj.is_open())
         {
             outp_obj << "\nAlphabet plain:\t\t[ ";
@@ -246,12 +246,12 @@ void BrowseToFile(string usr_msg_plain, string a_plain, bool IO)
             outp_obj << " ]\n\n";
             outp_obj << "Key (symbols):\t\t[ ";
             for(size_t i{}; i < a_plain.size(); ++i)
-                outp_obj << key_symbols_original_unicode[i];
+                outp_obj << key[i];
             outp_obj << " ]\n\n\n\n";
             outp_obj << "\t\t\t\t\t[\tMESSAGE\t\t]\n\n";
             for(size_t i{}; i < usr_msg_plain.size(); ++i)
             {
-                outp_obj << users_msg_subbed_unicode[i];
+                outp_obj << msg_subbed[i];
                 if(i != 0 && i % 118 == 0)
                     outp_obj << "\n";
             }                
