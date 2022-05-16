@@ -97,7 +97,7 @@ int main()
             
             if(users_choice == 'y' || users_choice == 'Y')
             {
-                BrowseToFile(users_msg, users_msg_subbed_unicode, max_msg_size, key_symbols_original_unicode, alphabet_plain_display, false);
+                BrowseToFile(users_msg, users_msg_subbed_unicode, 0, key_symbols_original_unicode, alphabet_plain_display, false);
                 getline(cin, users_msg);
             }
         }
