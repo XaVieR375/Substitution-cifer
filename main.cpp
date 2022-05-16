@@ -9,7 +9,7 @@
 #include <locale>
 #include <codecvt>
 #include <windows.h>
-//#define NOMINMAX
+//#define NOMINMAX    // For VISUAL STUDIOS compiler: To use the MAX keyword from cin.ignore(numeric_limits..) in VisualStudios
 
 using std::cout;
 using std::cin;
@@ -24,7 +24,7 @@ using std::random_shuffle;
 using std::wfstream;
 
 // Function prototypes
-void KeyShuffled(wchar_t[], size_t);     // https://www.geeksforgeeks.org/shuffle-an-array-using-stl-in-c
+void KeyShuffled(wchar_t[], size_t);
 void Substitute(string &, wchar_t[], size_t,  wchar_t[], string);
 void BrowseToFile(string, wchar_t[], int, wchar_t[], string, bool = true);
 
@@ -57,7 +57,6 @@ int main()
     {
         cout << "------------ Sub Cipher ------------ \n\n";
         cout << "1) Create a sub cipher message with option to save it\n";
-        //cout << "2) Sub / unsub a message from a saved .txt file\n";
         cout << "2) Load a saved .txt file with a subbed message\n";
         cout << "3) Load a sub cipher message from clipboard\n";
         cout << "4) Exit\n\n";
